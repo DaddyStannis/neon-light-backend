@@ -5,6 +5,8 @@ import "dotenv/config.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json" assert { type: "json" };
 
+import orderRoutes from "./routes/orderRoutes.js";
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -14,6 +16,8 @@ app.use(logger(formatsLogger));
 app.use(cors());
 
 app.use(express.json());
+
+app.use("/orders", orderRoutes);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
