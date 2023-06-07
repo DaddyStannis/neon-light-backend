@@ -5,7 +5,7 @@ import multer from "multer";
 const { CLOUDINARY_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
   process.env;
 
-const ALLOWED_FORMATS = ["jpg", "png"];
+const ALLOWED_FORMATS = ["jpg", "png", "svg"];
 
 cloudinary.v2.config({
   cloud_name: CLOUDINARY_NAME,
@@ -15,7 +15,7 @@ cloudinary.v2.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary.v2,
-  folder: "photos",
+  folder: "images",
   allowedFormats: ALLOWED_FORMATS,
   filename: (req, file, cb) => {
     const uniquePrefix = Date.now() + "_" + Math.round(Math.random() * 1e9);
@@ -30,7 +30,10 @@ const uploadCloud = multer({
       file.originalname.split(".")[file.originalname.split(".").length - 1];
 
     if (!ALLOWED_FORMATS.includes(fileExtension)) {
-      return cb({ message: "Invalid format. Allow only .png or .jpg" }, false);
+      return cb(
+        { message: "Invalid format. Allow only .svg, .png, .jpg" },
+        false
+      );
     }
 
     cb(null, true);
