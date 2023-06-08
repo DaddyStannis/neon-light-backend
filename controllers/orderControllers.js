@@ -77,7 +77,7 @@ async function createOrder(req, res) {
   };
 
   sendEmail(email);
-  res.json(result);
+  res.status(201).json(result);
 }
 
 export default { createOrder: controlWrapper(createOrder) };

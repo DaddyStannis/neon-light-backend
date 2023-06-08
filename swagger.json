@@ -1,1 +1,216 @@
-{}
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "1.0.0",
+    "title": "Neon light docs"
+  },
+  "consumers": ["multipart/form-data"],
+  "producers": ["application/json"],
+  "servers": [
+    { "url": "https://neonlight.onrender.com" },
+    { "url": "https://localhost:3000" }
+  ],
+  "tags": [
+    {
+      "name": "Orders",
+      "description": "Order endpoints"
+    }
+  ],
+  "paths": {
+    "/orders": {
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Order creation",
+        "parameters": [],
+        "requestBody": {
+          "description": "If the client does not send any order parameters, then it must send a file, otherwise it will receive a 400 error. If the client did not send order data, it will receive a response body without the order field.",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": { "$ref": "#/components/schemas/CreateOrderRequest" }
+            },
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateOrderRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateOrderResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "A required field is probably missing or invalid data transmitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateOrderRequest": {
+        "type": "object",
+        "required": ["name", "phone", "email", "communicateBy"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Stepan"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "stepan@meta.ua"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+38(097)555-55-55",
+            "description": "Must match this format"
+          },
+          "comment": {
+            "type": "string",
+            "example": "Here is a comment about the order"
+          },
+          "communicateBy": {
+            "type": "array",
+            "example": ["viber", "telegram"],
+            "description": "Must be an array of one or more messengers from the list: email, telegram, viber"
+          },
+          "file": {
+            "type": "string",
+            "example": "binary"
+          },
+          "order": {
+            "type": "object",
+            "required": ["text", "font", "color", "width", "height", "price"],
+            "properties": {
+              "text": {
+                "type": "string",
+                "example": "Hello world"
+              },
+              "font": {
+                "type": "string",
+                "example": "Times New Roman"
+              },
+              "color": {
+                "type": "string",
+                "example": "#000000",
+                "description": "In hex format"
+              },
+              "width": {
+                "type": "number",
+                "example": 100
+              },
+              "height": {
+                "type": "number",
+                "example": 100
+              },
+              "price": {
+                "type": "number",
+                "example": 999.99
+              },
+              "positionText": {
+                "type": "string",
+                "example": "center",
+                "description": "Must be one of: start (default), end, center, justify"
+              },
+              "styleText": {
+                "type": "string",
+                "example": "uppercase",
+                "description": "Must be one of: uppercase, lowercase, capitalize, none (default)"
+              }
+            }
+          }
+        }
+      },
+      "CreateOrderResponse": {
+        "type": "object",
+        "required": ["name", "phone", "email", "communicateBy"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Stepan"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "stepan@meta.ua"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+38(097)555-55-55"
+          },
+          "comment": {
+            "type": "string",
+            "example": "Here is a comment about the order"
+          },
+          "communicateBy": {
+            "type": "array",
+            "example": ["viber"]
+          },
+          "fileURL": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/dsadwasuq9/image/upload/v16210340/orders/dhs4z912sjx9yfoxsvt6.jpg"
+          },
+          "order": {
+            "type": "object",
+            "required": ["text", "font", "color", "width", "height", "price"],
+            "properties": {
+              "text": {
+                "type": "string",
+                "example": "Hello world"
+              },
+              "font": {
+                "type": "string",
+                "example": "Times New Roman"
+              },
+              "color": {
+                "type": "string",
+                "example": "#000000"
+              },
+              "width": {
+                "type": "number",
+                "example": 100
+              },
+              "height": {
+                "type": "number",
+                "example": 100
+              },
+              "price": {
+                "type": "number",
+                "example": 999.99
+              },
+              "positionText": {
+                "type": "string",
+                "example": "center"
+              },
+              "styleText": {
+                "type": "string",
+                "example": "uppercase"
+              }
+            }
+          }
+        }
+      },
+      "BadRequestResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "\"name\" is required"
+          }
+        }
+      }
+    }
+  }
+}
