@@ -2,8 +2,9 @@ import { Schema, model } from "mongoose";
 import Joi from "joi";
 import handleMongooseError from "../helpers/handleMongooseError.js";
 
-const PHONE_REGEXP = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
-const EMAIL_REGEXP = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const PHONE_REGEXP = /^\+\d{1,3}\(\d{1,4}\)\d{3}[\s.-]\d{2}[\s.-]\d{2}$/;
+const EMAIL_REGEXP = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+const NAME_REGEXP = /^[\p{L}\s]+$/u;
 const MESSENGERS = ["email", "telegram", "viber"];
 
 function communicateByValidator(values, helper) {
@@ -30,7 +31,17 @@ const schema = new Schema(
     name: {
       type: String,
       trim: true,
+      min: 3,
+      max: 30,
+      match: NAME_REGEXP,
       required: [true, '"name" is required'],
+    },
+    comment: {
+      type: String,
+      trim: true,
+      min: 0,
+      max: 1000,
+      default: "",
     },
     phone: {
       type: String,
@@ -65,11 +76,16 @@ const schema = new Schema(
           values: ["start", "end", "center", "justify"],
           message: '"positionText" must be one of: start, end, center, justify',
         },
-        required: true,
+        default: "start",
       },
       styleText: {
         type: String,
-        required: [true, '"styleText" is required'],
+        enum: {
+          values: ["uppercase", "lowercase", "capitalize", "none"],
+          message:
+            '"styleText" must be one of: uppercase, lowercase, capitalize, none',
+        },
+        default: "none",
       },
       font: {
         type: String,
@@ -89,6 +105,7 @@ const schema = new Schema(
       },
       price: {
         type: Number,
+        required: [true, '"price" is required'],
       },
     }),
   },
@@ -101,8 +118,10 @@ schema.post("findOneAndUpdate", handleMongooseError);
 schema.post("insertMany", handleMongooseError);
 
 const createOrderSchema = Joi.object({
-  name: Joi.string().required().messages({
+  name: Joi.string().required().min(1).max(30).regex(NAME_REGEXP).messages({
     "any.required": '"name" is required',
+    "string.min": `"name" should have a minimum length of {#limit}`,
+    "string.max": `"name" should have a maximum length of {#limit}`,
   }),
   phone: Joi.string().regex(PHONE_REGEXP).required().messages({
     "any.required": '"phone" is required',
@@ -112,6 +131,10 @@ const createOrderSchema = Joi.object({
     "any.required": '"email" is required',
     "string.pattern.base": 'Invalid "email" format',
   }),
+  comment: Joi.string().min(0).max(1000).messages({
+    "string.min": `"name" should have a minimum length of {#limit}`,
+    "string.max": `"name" should have a maximum length of {#limit}`,
+  }),
   communicateBy: Joi.array()
     .required()
     .custom(communicateByValidator)
@@ -120,14 +143,14 @@ const createOrderSchema = Joi.object({
     }),
   fileURL: Joi.string(),
   order: Joi.object({
-    text: Joi.string(),
+    text: Joi.string().required(),
     positionText: Joi.string(),
     styleText: Joi.string(),
-    font: Joi.string(),
-    color: Joi.string(),
-    width: Joi.number(),
-    height: Joi.number(),
-    price: Joi.number(),
+    font: Joi.string().required(),
+    color: Joi.string().required(),
+    width: Joi.number().required(),
+    height: Joi.number().required(),
+    price: Joi.number().required(),
   }),
 });
 
