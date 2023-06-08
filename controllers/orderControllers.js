@@ -70,7 +70,7 @@ async function createOrder(req, res) {
   }
 
   const email = {
-    to: "corala9918@pyadu.com",
+    to: EMAIL,
     subject: "Order received",
     html,
     attachments,
