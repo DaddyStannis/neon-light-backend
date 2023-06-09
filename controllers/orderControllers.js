@@ -1,9 +1,7 @@
-import { v2 as cloudinary } from "cloudinary";
 import HttpError from "../helpers/HttpError.js";
 import controlWrapper from "../decorators/controlWrapper.js";
 import Order from "../models/Order.js";
 import sendEmail from "../helpers/sendEmail.js";
-import { createOrderSchema } from "../models/Order.js";
 
 const { CLIENT_EMAIL } = process.env;
 
