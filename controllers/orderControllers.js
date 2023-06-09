@@ -7,7 +7,7 @@ import { createOrderSchema } from "../models/Order.js";
 
 const { CLIENT_EMAIL } = process.env;
 
-async function createOrder(req, res, next) {
+async function createOrder(req, res) {
   const { file, body } = req;
   const fileURL = file ? file.path : null;
 
