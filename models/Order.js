@@ -148,8 +148,13 @@ const createOrderSchema = Joi.object({
   fileURL: Joi.string(),
   order: Joi.object({
     text: Joi.string().required(),
-    positionText: Joi.string(),
-    styleText: Joi.string(),
+    positionText: Joi.string().valid("start", "end", "center", "justify"),
+    styleText: Joi.string().valid(
+      "uppercase",
+      "lowercase",
+      "capitalize",
+      "none"
+    ),
     font: Joi.string().required(),
     color: Joi.string().required(),
     width: Joi.number().required(),
