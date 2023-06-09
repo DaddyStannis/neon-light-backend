@@ -65,49 +65,53 @@ const schema = new Schema(
       type: String,
       trim: true,
     },
-    order: new Schema({
-      text: {
-        type: String,
-        required: [true, '"text" is required'],
-      },
-      positionText: {
-        type: String,
-        enum: {
-          values: ["start", "end", "center", "justify"],
-          message: '"positionText" must be one of: start, end, center, justify',
+    order: new Schema(
+      {
+        text: {
+          type: String,
+          required: [true, '"text" is required'],
         },
-        default: "start",
-      },
-      styleText: {
-        type: String,
-        enum: {
-          values: ["uppercase", "lowercase", "capitalize", "none"],
-          message:
-            '"styleText" must be one of: uppercase, lowercase, capitalize, none',
+        positionText: {
+          type: String,
+          enum: {
+            values: ["start", "end", "center", "justify"],
+            message:
+              '"positionText" must be one of: start, end, center, justify',
+          },
+          default: "start",
         },
-        default: "none",
+        styleText: {
+          type: String,
+          enum: {
+            values: ["uppercase", "lowercase", "capitalize", "none"],
+            message:
+              '"styleText" must be one of: uppercase, lowercase, capitalize, none',
+          },
+          default: "none",
+        },
+        font: {
+          type: String,
+          required: [true, '"font" is required'],
+        },
+        color: {
+          type: String,
+          required: [true, '"color" is required'],
+        },
+        width: {
+          type: Number,
+          required: [true, '"width" is required'],
+        },
+        height: {
+          type: Number,
+          required: [true, '"height" is required'],
+        },
+        price: {
+          type: Number,
+          required: [true, '"price" is required'],
+        },
       },
-      font: {
-        type: String,
-        required: [true, '"font" is required'],
-      },
-      color: {
-        type: String,
-        required: [true, '"color" is required'],
-      },
-      width: {
-        type: Number,
-        required: [true, '"width" is required'],
-      },
-      height: {
-        type: Number,
-        required: [true, '"height" is required'],
-      },
-      price: {
-        type: Number,
-        required: [true, '"price" is required'],
-      },
-    }),
+      { _id: false }
+    ),
   },
   { versionKey: false, timestamps: true }
 );
