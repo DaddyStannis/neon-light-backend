@@ -5,25 +5,11 @@ import Order from "../models/Order.js";
 import sendEmail from "../helpers/sendEmail.js";
 import { createOrderSchema } from "../models/Order.js";
 
-const { EMAIL } = process.env;
+const { CLIENT_EMAIL } = process.env;
 
 async function createOrder(req, res, next) {
   const { file, body } = req;
   const fileURL = file ? file.path : null;
-
-  try {
-    // validating the schema and deleting the image from the cloud if the validation fails
-    const result = createOrderSchema.validate(body);
-
-    if (result.error) {
-      throw new HttpError(400, result.error.message);
-    }
-  } catch (error) {
-    if (file) {
-      cloudinary.uploader.destroy(file.filename);
-    }
-    next(error);
-  }
 
   if (!file && !body.order) {
     throw HttpError(
@@ -86,7 +72,7 @@ async function createOrder(req, res, next) {
   }
 
   const email = {
-    to: EMAIL,
+    to: CLIENT_EMAIL,
     subject: "Order received",
     html,
     attachments,

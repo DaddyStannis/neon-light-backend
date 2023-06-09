@@ -54,4 +54,13 @@ function fileFilter(req, file, cb) {
   cb(null, true);
 }
 
-export default upload;
+function destroySingleFile(err, req, res, next) {
+  const { file } = req;
+
+  if (file) {
+    cloudinary.uploader.destroy(file.filename);
+  }
+  next(err);
+}
+
+export { upload, destroySingleFile };
