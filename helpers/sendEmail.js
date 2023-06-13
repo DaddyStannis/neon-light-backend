@@ -1,10 +1,15 @@
 import nodemailer from "nodemailer";
 
-const { NODEMAILER_EMAIL, NODEMAILER_PASSWORD } = process.env;
+const {
+  NODEMAILER_EMAIL,
+  NODEMAILER_PASSWORD,
+  NODEMAILER_HOST,
+  NODEMAILER_PORT,
+} = process.env;
 
 const config = {
-  host: "smtp.meta.ua",
-  port: 465,
+  host: NODEMAILER_HOST,
+  port: NODEMAILER_PORT,
   secure: true,
   auth: {
     user: NODEMAILER_EMAIL,
