@@ -9,13 +9,6 @@ async function createOrder(req, res) {
   const { file, body } = req;
   const fileURL = file ? file.path : null;
 
-  if (!file && !body.order) {
-    throw HttpError(
-      400,
-      "The order must contain a description of the order parameters, or a file"
-    );
-  }
-
   const result = await Order.create({ ...body, fileURL });
 
   let orderMarkup = "";
