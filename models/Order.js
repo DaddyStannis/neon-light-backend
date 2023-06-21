@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import Joi from "joi";
 import handleMongooseError from "../helpers/handleMongooseError.js";
 
-const PHONE_REGEXP = /^\+\d{1,3}\(\d{1,4}\)\d{3}\d{2}\d{2}$/;
+const PHONE_REGEXP = /^\+380\d{9}$/;
 const EMAIL_REGEXP = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 const NAME_REGEXP = /^[\p{L}\s]+$/u;
 const MESSENGERS = ["email", "telegram", "viber"];
